@@ -9,7 +9,7 @@ spec:
   type: service
   parameters:
     - title: Basics
-      required: [name, owner, env, repoOwner, repoNameshould]
+      required: [name, owner, env, repoOwner, repoName]
       properties:
         name:
           type: string
