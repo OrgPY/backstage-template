@@ -3,7 +3,7 @@ kind: Template
 metadata:
   name: ai-agent-service
   title: AI Agent Service
-  description: Scaffold a new AI Agent service with Helm + GitOps + policies
+  description: Scaffold AI-agent deployment service with Helm + policies
 spec:
   owner: ai-platform
   type: service
@@ -22,20 +22,22 @@ spec:
           enum: [dev, staging, prod]
         repo:
           type: string
-          description: GitHub repo in the form your-org/your-repo
+          description: GitHub repo like org/my-service
   steps:
     - id: fetch
-      name: Fetch skeleton
+      name: Fetch skeleton from remote
       action: fetch:template
       input:
-        url: ./skeleton
+        # ✅ 用 GitHub 目录 URL（tree 或 blob 都行，Backstage 会通过 UrlReader 拉取整目录）
+        url: https://github.com/OrgPY/backstage-template/tree/master/skeleton
+        # 如果你用 default 分支叫 master，就把 main 改成 master
         values:
           name: '{{ parameters.name }}'
           owner: '{{ parameters.owner }}'
           env: '{{ parameters.env }}'
           repo: '{{ parameters.repo }}'
     - id: publish
-      name: Create PR with generated files
+      name: Open PR with generated files
       action: publish:github:pull-request
       input:
         repoUrl: 'github.com?owner={{ parameters.repo.split("/")[0] }}&repo={{ parameters.repo.split("/")[1] }}'
